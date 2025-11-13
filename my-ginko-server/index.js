@@ -1,18 +1,15 @@
-const express = require('express');
-const env = require('dotenv');
-
-env.config();
-
-const port = process.env.PORT;
+import express from 'express';
+import { router } from './router/index.js';
+import 'dotenv/config';
 
 const app = express();
+const port = process.env.PORT || 3000;
 
-console.log(port);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-  res.send('Hello World! From PORT:' + port);
-});
+app.listen(port, () =>
+  console.log('my-ginko server is running on port ' + port)
+);
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+app.use(router);
