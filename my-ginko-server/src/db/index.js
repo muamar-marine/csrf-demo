@@ -1,6 +1,6 @@
-import { Pool } from 'pg';
+import { Pool, types } from 'pg';
 
-import { kDatabase } from './constants/database.js';
+import { kDatabase } from '../constants/env.js';
 
 const pool = new Pool(kDatabase);
 
@@ -16,82 +16,37 @@ export class Db {
 
   async createTable() {
     try {
+      types.setTypeParser(1114, (str) => str);
+      types.setTypeParser(1184, (str) => str);
       await this.client.query('BEGIN');
 
-      // await this.client.query(`
-      //   CREATE TABLE IF NOT EXISTS kanji (
-      //     id TEXT PRIMARY KEY,
-      //     character TEXT NOT NULL,
-      //     grade INTEGER,
-      //     jlpt INTEGER,
-      //     freq INTEGER,
-      //     stroke_count INTEGER,
-      //     radical INTEGER NOT NULL,
-      //     onyomi TEXT[],
-      //     kunyomi TEXT[],
-      //     nanori TEXT[],
-      //     meaning TEXT[]
-      //   );
-      // `);
+      await this.client.query(`
+        SET TIME ZONE 'UTC';
 
-      // await this.client.query(`
-      //   CREATE TABLE IF NOT EXISTS kotoba (
-      //     id INTEGER PRIMARY KEY
-      //   );
-      // `);
+        CREATE TABLE IF NOT EXISTS users(
+          id SERIAL PRIMARY KEY,
+          name VARCHAR(100),
+          email VARCHAR(100) UNIQUE NOT NULL,
+          password VARCHAR(100) NOT NULL,
+          created_at TIMESTAMP DEFAULT NOW()
+        );  
 
-      // await this.client.query(`
-      //   CREATE TABLE IF NOT EXISTS kotoba_kanji (
-      //     id TEXT PRIMARY KEY,
-      //     kotoba_id INTEGER REFERENCES kotoba(id) ON DELETE CASCADE,
-      //     expression TEXT NOT NULL,
-      //     information TEXT[],
-      //     priority TEXT[]
-      //   );
-      // `);
+        CREATE TABLE IF NOT EXISTS accounts(
+          id SERIAL PRIMARY KEY,
+          user_id SERIAL REFERENCES users(id) ON DELETE CASCADE,
+          account_number VARCHAR(16) NOT NULL,
+          balance INTEGER NOT NULL DEFAULT 0,
+          created_at TIMESTAMP DEFAULT NOW()
+        );
 
-      // await this.client.query(`
-      //   CREATE TABLE IF NOT EXISTS kotoba_kanji_related (
-      //     id SERIAL PRIMARY KEY,
-      //     kotoba_kanji_id TEXT REFERENCES kotoba_kanji(id) ON DELETE CASCADE,
-      //     c TEXT NOT NULL,
-      //     kanji_id TEXT REFERENCES kanji(id) ON DELETE CASCADE
-      //   );
-      // `);
-
-      // await this.client.query(`
-      //   CREATE TABLE IF NOT EXISTS kotoba_reading (
-      //     id TEXT PRIMARY KEY,
-      //     kotoba_id INTEGER REFERENCES kotoba(id) ON DELETE CASCADE,
-      //     expression TEXT NOT NULL,
-      //     is_no_kanji BOOLEAN DEFAULT false,
-      //     restricted TEXT[],
-      //     information TEXT[],
-      //     priority TEXT[]
-      //   );
-      // `);
-      // await this.client.query(`
-      //   CREATE TABLE IF NOT EXISTS kotoba_definitions (
-      //     id TEXT PRIMARY KEY,
-      //     kotoba_id INTEGER REFERENCES kotoba(id) ON DELETE CASCADE,
-      //     restricted_kanji TEXT[],
-      //     restricted_reading TEXT[],
-      //     part_of_speech TEXT[],
-      //     cross_refs TEXT[],
-      //     antonyms TEXT[],
-      //     fields TEXT[],
-      //     tags TEXT[]
-      //   );
-      // `);
-
-      // await this.client.query(`
-      //   CREATE TABLE IF NOT EXISTS kotoba_definition_glossary (
-      //     id SERIAL PRIMARY KEY,
-      //     kotoba_definitions_id TEXT REFERENCES kotoba_definitions(id) ON DELETE CASCADE,
-      //     value TEXT NOT NULL,
-      //     g_type TEXT
-      //   );
-      // `);
+        CREATE TABLE IF NOT EXISTS tokens(
+          id SERIAL PRIMARY KEY,
+          token VARCHAR(100) NOT NULL,
+          type VARCHAR(25) NOT NULL,
+          void_at TIMESTAMP NOT NULL,
+          created_at TIMESTAMP DEFAULT NOW()
+        );
+      `);
 
       await this.client.query('COMMIT');
       console.log('✅ All tables created');

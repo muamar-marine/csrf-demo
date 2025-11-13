@@ -7,3 +7,7 @@ export const kDatabase = {
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
 };
+
+export const kSecret = {
+  jwt: process.env.SECRET_KEY,
+};
