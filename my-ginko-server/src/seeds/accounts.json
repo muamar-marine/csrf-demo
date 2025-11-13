@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "user_id": 1,
+    "account_number": "1234567887654321",
+    "balance": 982321342
+  },
+  {
+    "id": 2,
+    "user_id": 2,
+    "account_number": "8765432112345678",
+    "balance": 1021000
+  },
+  {
+    "id": 3,
+    "user_id": 3,
+    "account_number": "1212343445455656",
+    "balance": 0
+  }
+]

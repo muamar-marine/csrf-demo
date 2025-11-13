@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "email": "pantalone@fatui.or.ru",
+    "name": "Pantalone",
+    "password": "FatuiIzKooL234"
+  },
+  {
+    "id": 2,
+    "email": "dottore@fatui.or.ru",
+    "name": "Zandik",
+    "password": "ChumIzFum909"
+  },
+  {
+    "id": 3,
+    "email": "defalt@malicious.co",
+    "name": "DefalT_HacK",
+    "password": "xxx123PwNdxxx"
+  }
+]
