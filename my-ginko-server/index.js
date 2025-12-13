@@ -26,7 +26,10 @@ await db.init();
 
 await db.createTable();
 
-const allowedOrigins = ['http://localhost:2000'];
+const allowedOrigins = [
+  // 'http://localhost:8888',
+  'http://localhost:2000',
+];
 
 app.use(
   cors({

@@ -23,7 +23,7 @@ export function router(
 
   r.get('/', (_, res) => res.status(200).json({ message: 'Hello, world!' }));
 
-  r.use('/auth', authRouter(authController));
+  r.use('/auth', authRouter(authController, usersModel));
 
   r.use(authenticate(usersModel));
   r.use(

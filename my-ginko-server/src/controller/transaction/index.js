@@ -52,7 +52,7 @@ export class TransactionController {
       if (!amount || amount <= 10000 || isNaN(Number(amount)))
         throw new Error('INSUFFICIENT_AMOUNT');
 
-      if (!account_number) throw new Error('MISSING_ACOUNT_NUMBER');
+      if (!account_number) throw new Error('MISSING_ACCOUNT_NUMBER');
 
       await this.#transactions.Transfer({
         amount,

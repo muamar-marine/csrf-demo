@@ -1,8 +1,8 @@
 {
-  "dependencies": {
- 
+  "scripts": {
+    "install:all": "npm i && concurrently \"npm --prefix malicious-ginko install\" \"npm --prefix malicious-server install\" \"npm --prefix my-ginko install\" \"npm --prefix my-ginko-server install\""
   },
   "devDependencies": {
-  
+    "concurrently": "^9.2.1"
   }
 }

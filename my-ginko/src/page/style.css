@@ -1,0 +1,15 @@
+.g-home__sider__logo {
+  margin-inline: auto;
+  display: block;
+  margin-block: 2rem;
+  max-width: 10rem;
+  width: 100%;
+}
+
+.g-home__sider__menu {
+  padding-inline: 1rem;
+}
+
+.g-home__sider__menu > .ant-menu-item {
+  margin-block: 0.5rem;
+}
