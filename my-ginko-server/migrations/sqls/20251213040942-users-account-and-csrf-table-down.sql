@@ -1,0 +1,8 @@
+SET
+  TIME ZONE 'UTC';
+
+DROP TABLE IF EXISTS accounts;
+
+DROP TABLE IF EXISTS tokens;
+
+DROP TABLE IF EXISTS users;

@@ -1,7 +1,21 @@
-import { useLocation } from 'react-router-dom';
+import { Typography } from 'antd';
+import { DefaultLayout } from '../layouts';
+
+const { Title,Text } = Typography;
 
 export default function HomePage() {
-  const { pathname } = useLocation();
+  return (
+    <DefaultLayout>
+      <main>
+        <Title level={2}>Home</Title>
 
-  return <main>Hello from Home Page. Pathname: {pathname}</main>;
+        <section>
+          <Text>
+            Welcome to Lorem Ipsum Bank.
+          </Text>
+          
+        </section>
+      </main>
+    </DefaultLayout>
+  );
 }

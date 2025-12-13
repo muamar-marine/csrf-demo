@@ -1,3 +1,4 @@
+import { App as Antd } from 'antd';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { ProtectedRoute } from './components/protected-route';
 
@@ -7,10 +8,15 @@ import TransferPage from './page/transaction/transfer';
 import TransferUnsafePage from './page/transaction/transfer-unsafe';
 import BalancePage from './page/transaction/balance';
 import E404Page from './page/error/e-404';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
+import { useAuth } from './stores/auth';
+import axios, { AxiosError } from 'axios';
 
 function App() {
-  const isAuthenticated = false;
+  const { message } = Antd.useApp();
+  const cred = useAuth((state) => state.cred);
+  const setUserData = useAuth((state) => state.setUserData);
+  const isAuthenticated = !!cred;
 
   // * Assuming this hooks is there because someone tampering this codebase via XSS or else.
   useEffect(() => {
@@ -36,6 +42,34 @@ function App() {
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
   }, []);
+
+  const getMe = useCallback(
+    async (token: string | null) => {
+      if (!token) return;
+
+      try {
+        const response = await axios.get('http://localhost:8000/auth/get-me', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const userData = response?.data?.data;
+
+        setUserData(userData);
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          message.error(err.response?.data?.message);
+          return;
+        }
+
+        message.error('Unknown error occured');
+      }
+    },
+    [message, setUserData]
+  );
+
+  useEffect(() => {
+    getMe(cred);
+  }, [cred, getMe]);
 
   return (
     <BrowserRouter>

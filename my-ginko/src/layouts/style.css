@@ -1,0 +1,43 @@
+.g-default-layout__sider__logo {
+  margin-inline: auto;
+  display: block;
+  margin-block: 1.25rem;
+  max-height: 1.5rem;
+  height: 100%;
+}
+
+.g-default-layout__sider__menu {
+  padding-inline: 1rem;
+  border-inline-end: 0px solid transparent !important;
+}
+
+.g-default-layout__sider__menu > .ant-menu-item {
+  margin-block: 0.5rem;
+}
+
+.g-default-layout__header {
+  height: calc(4rem + 1px);
+  background-color: #ffffff;
+  border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+}
+
+.g-default-layout__header__wrap {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+
+.g-default-layout__user {
+  display: flex;
+  height: max-content;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.g-default-layout__user > p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}

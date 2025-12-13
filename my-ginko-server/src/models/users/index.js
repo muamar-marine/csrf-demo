@@ -57,6 +57,25 @@ export class UsersModel {
     }
   }
 
+  async GetById(payload) {
+    try {
+      const q = `SELECT id, email, name, created_at FROM users WHERE id = $1`;
+      const result = await this.#db.client.query(q, [payload.id]);
+
+      const user = result.rows?.[0];
+      if (!user) throw new Error('USER_NOT_FOUND');
+
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        created_at: user.created_at,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
   /**
    * @typedef {object} User
    * @property {number} id

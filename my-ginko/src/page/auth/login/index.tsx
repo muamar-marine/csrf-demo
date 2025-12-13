@@ -1,13 +1,49 @@
-import companyLogo from '../../../assets/logo.svg';
-
-import { Button, Form, Input, type FormProps } from 'antd';
 import './style.css';
 
+import { Button, Form, Input, type FormProps, App } from 'antd';
+import axios, { AxiosError } from 'axios';
+
+import companyLogo from '../../../assets/logo.svg';
+import { useAuth } from '../../../stores/auth';
+
 export default function LoginPage() {
+  const setCred = useAuth((state) => state.setCred);
+
   const [form] = Form.useForm();
 
-  const handleFinish: FormProps['onFinish'] = (values) => {
-    localStorage.setItem('cred', JSON.stringify(values));
+  const { message } = App.useApp();
+
+  const login = async (payload: { email: string; password: string }) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:8000/auth/login',
+        payload
+      );
+      const token = response?.data.data?.access_token;
+
+      localStorage.setItem('cred', token);
+      setCred(token);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.data?.message === 'user is invalid') {
+          form.setFields([
+            { name: 'email', errors: ['Wrong Email or Password'] },
+            { name: 'password', errors: ['Wrong Email or Password'] },
+          ]);
+          return;
+        }
+        form.setFields([
+          { name: 'email', errors: [error.response?.data.message] },
+          { name: 'password', errors: [error.response?.data.message] },
+        ]);
+        return;
+      }
+      message.error('Unknown error occured');
+    }
+  };
+
+  const handleFinish: FormProps['onFinish'] = async (values) => {
+    await login(values);
   };
 
   return (
